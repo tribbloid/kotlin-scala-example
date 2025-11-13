@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew build:*)",
+      "Bash(./gradlew:*)",
+      "Bash(javac:*)",
+      "Bash(javap:*)",
+      "Bash(find:*)",
+      "Bash(chmod:*)",
+      "WebSearch",
+      "Bash(git checkout:*)",
+      "Bash(echo:*)",
+      "mcp__jetbrains__list_directory_tree"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "enabledMcpjsonServers": [
+    "fetch",
+    "playwright",
+    "memory",
+    "deepwiki",
+    "lean4ij-metals",
+    "jetbrains"
+  ]
+}

@@ -1,44 +1,43 @@
 plugins {
     scala
-    kotlin("jvm") version "1.9.20"
+    kotlin("jvm") version "1.9.24"
     application
+    id("com.dorongold.task-tree") version "2.1.1"
+    `java-test-fixtures`
 }
 
-repositories {
-    mavenCentral()
-}
+val scalaVersion = "2.13.17"
 
-val scalaVersion = property("scalaVersion").toString()
-
-application {
-    mainClass.set("example.ScalaMain")
-}
-
-dependencies {
-    implementation("org.scala-lang:scala-library:$scalaVersion")
-    implementation(kotlin("stdlib"))
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(property("javaVersion").toString()))
+// Common repositories configuration
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
     }
 }
 
-sourceSets {
-    main {
-//        scala {
-//            setSrcDirs(listOf("src/main/scala"))
-//        }
-        java {
-            setSrcDirs(listOf<String>())
-        }
-        kotlin {
-            setSrcDirs(listOf("src/main/kotlin"))
-        }
+
+allprojects {
+
+    apply(plugin = "scala")
+
+    // Configure common dependencies
+    dependencies {
+        implementation("org.scala-lang:scala-library:$scalaVersion")
+        implementation(kotlin("stdlib"))
     }
 }
 
-//tasks.named<JavaCompile>("compileJava") {
-//    enabled = false
-//}
+// Shared configuration for all subprojects
+subprojects {
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "java-test-fixtures")
+
+
+    // Configure Java toolchain
+    configure<JavaPluginExtension> {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of("17"))
+        }
+    }
+}

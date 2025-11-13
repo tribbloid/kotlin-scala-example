@@ -3,3 +3,8 @@ plugins {
 }
 
 rootProject.name = "kotlin-scala-example"
+include(
+    ":KotlinThenScala",
+//    ":alsoKotlinThenScala",
+    ":ScalaThenKotlin"
+)
