@@ -7,19 +7,12 @@ fun jointScala(taskPrefix: String, moduleType: String) {
     val javaTaskName = "${taskPrefix}Java"
     val scalaTaskName = "${taskPrefix}Scala"
 
-    sourceSets {
-        named(moduleType) {
-            scala.setSrcDirs(listOf("src/${moduleType}/scala", "src/${moduleType}/java"))
-        }
-    }
+    val ss = sourceSets.named(moduleType).get()
+    ss.scala.srcDirs(listOf("src/${moduleType}/java"))
 
     afterEvaluate {
-        tasks.named<JavaCompile>(javaTaskName) {
-            enabled = false
-        }
-
+        // cut dependency of scalaCompile to JavaCompile
         tasks.named<ScalaCompile>(scalaTaskName) {
-            val ss = sourceSets.named(moduleType).get()
             val javaTarget = ss.java.destinationDirectory
 
             // Log classpath before manipulation
@@ -44,6 +37,11 @@ fun jointScala(taskPrefix: String, moduleType: String) {
 
 //            setDependsOn(emptyList<Any>())
         }
+
+        tasks.named<JavaCompile>(javaTaskName) {
+            enabled = false
+        }
+
     }
 }
 
