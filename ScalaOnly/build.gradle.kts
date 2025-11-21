@@ -5,7 +5,7 @@ import org.gradle.api.tasks.scala.ScalaCompile
 import java.io.File
 
 fun jointScala(taskPrefix: String, moduleType: String) {
-    val javaTaskName = "${taskPrefix}Java"
+//    val javaTaskName = "${taskPrefix}Java"
     val scalaTaskName = "${taskPrefix}Scala"
 
     val ss = sourceSets.named(moduleType).get()
@@ -32,8 +32,8 @@ fun jointScala(taskPrefix: String, moduleType: String) {
         ss.output.forEach { file ->
             println("  - $file")
         }
+        classpath = ss.compileClasspath.minus(files(javaTarget))
 
-        classpath = classpath.minus(files(javaTarget))
 
         // Log classpath after manipulation
         println("\nModified classpath for $scalaTaskName:")

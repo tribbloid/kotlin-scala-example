@@ -8,7 +8,44 @@ fun jointScala(taskPrefix: String, moduleType: String) {
     val scalaTaskName = "${taskPrefix}Scala"
 
     val ss = sourceSets.named(moduleType).get()
-    ss.scala.srcDirs(listOf("src/${moduleType}/java"))
+    ss.scala.srcDirs(listOf("src/${moduleType}/java", "src/${moduleType}/scala"))
+
+    tasks.compileScala {
+
+        // Log classpath before manipulation
+        println("====\nOriginal compileScala:")
+        val k = this
+        k.classpath.files.forEach { file ->
+            println("  - $file")
+        }
+    }
+
+    // cut dependency of scalaCompile to JavaCompile
+    tasks.named<ScalaCompile>(scalaTaskName) {
+        val javaTarget = ss.java.destinationDirectory
+
+        // Log classpath before manipulation
+        println("====\nOriginal classpath for $scalaTaskName:")
+        classpath.files.forEach { file ->
+            println("  - $file")
+        }
+
+        // Log classpath before manipulation
+        println("\nOriginal sourceSets output for $moduleType:")
+        ss.output.files.forEach { file ->
+            println("  - $file")
+        }
+
+        classpath = ss.compileClasspath.minus(files(javaTarget))
+
+        // Log classpath after manipulation
+        println("\nModified classpath for $scalaTaskName:")
+        classpath.files.forEach { file ->
+            println("  - $file")
+        }
+
+//            setDependsOn(emptyList<Any>())
+    }
 
     afterEvaluate {
         // cut dependency of scalaCompile to JavaCompile
@@ -16,24 +53,24 @@ fun jointScala(taskPrefix: String, moduleType: String) {
             val javaTarget = ss.java.destinationDirectory
 
             // Log classpath before manipulation
-//            println("====\nOriginal classpath for $scalaTaskName:")
-//            classpath.files.forEach { file ->
-//                println("  - $file")
-//            }
+            println("====\nOriginal classpath for $scalaTaskName:")
+            classpath.files.forEach { file ->
+                println("  - $file")
+            }
 
             // Log classpath before manipulation
-//            println("\nOriginal output for $scalaTaskName:")
-//            ss.output.files.forEach { file ->
-//                println("  - $file")
-//            }
+            println("\nOriginal sourceSets output for $moduleType:")
+            ss.output.files.forEach { file ->
+                println("  - $file")
+            }
 
             classpath = ss.compileClasspath.minus(files(javaTarget))
 
             // Log classpath after manipulation
-//            println("\nModified classpath for $scalaTaskName:")
-//            classpath.files.forEach { file ->
-//                println("  - $file")
-//            }
+            println("\nModified classpath for $scalaTaskName:")
+            classpath.files.forEach { file ->
+                println("  - $file")
+            }
 
 //            setDependsOn(emptyList<Any>())
         }
@@ -43,6 +80,14 @@ fun jointScala(taskPrefix: String, moduleType: String) {
         }
 
     }
+}
+
+
+fun allJointScala() {
+    jointScala("compile", "main")
+    jointScala("compileTest", "test")
+
+    jointScala("compileTestFixtures", "testFixtures")
 }
 
 fun scalaThenKotlin(taskPrefix: String, srcType: String) {
@@ -67,4 +112,5 @@ fun allScalaThenKotlin() {
     scalaThenKotlin("compileTestFixtures", "testFixtures")
 }
 
+//allJointScala()
 allScalaThenKotlin()

@@ -4,7 +4,8 @@ plugins {
 
 rootProject.name = "kotlin-scala-example"
 include(
-    ":KotlinThenScala",
+    ":ScalaOnly",
+//    ":KotlinThenScala",
 //    ":alsoKotlinThenScala",
-    ":ScalaThenKotlin"
+//    ":ScalaThenKotlin"
 )
