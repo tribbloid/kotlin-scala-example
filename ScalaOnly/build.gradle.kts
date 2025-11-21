@@ -32,7 +32,7 @@ fun jointScala(taskPrefix: String, moduleType: String) {
         ss.output.forEach { file ->
             println("  - $file")
         }
-        classpath = ss.compileClasspath.minus(files(javaTarget))
+        classpath = classpath.minus(files(javaTarget))
 
 
         // Log classpath after manipulation
