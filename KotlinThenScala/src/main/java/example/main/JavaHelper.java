@@ -2,5 +2,5 @@ package example.main;
 
 public class JavaHelper {
     public static int v = 1;
-    public static int v2 = KtHelper.Companion.getV();
+    public static int v2 = 2;
 }

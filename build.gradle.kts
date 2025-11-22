@@ -1,43 +1,19 @@
-plugins {
-    scala
-    kotlin("jvm") version "1.9.24"
-    application
-    id("com.dorongold.task-tree") version "2.1.1"
-    `java-test-fixtures`
-}
-
-val scalaVersion = "2.13.17"
-
-// Common repositories configuration
-allprojects {
+buildscript {
     repositories {
-        mavenLocal()
+        // Add here whatever repositories you're already using
         mavenCentral()
     }
+
+    dependencies {
+        classpath("ch.epfl.scala:gradle-bloop_2.12:1.6.3") // suffix is always 2.12, weird
+    }
 }
 
-
-allprojects {
-
-    apply(plugin = "scala")
-
-    // Configure common dependencies
-    dependencies {
-        implementation("org.scala-lang:scala-library:$scalaVersion")
-        implementation(kotlin("stdlib"))
-    }
+plugins {
+    id("ai.acyclic.scala2-conventions")
 }
 
 // Shared configuration for all subprojects
 subprojects {
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "java-test-fixtures")
 
-
-    // Configure Java toolchain
-    configure<JavaPluginExtension> {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of("17"))
-        }
-    }
 }
