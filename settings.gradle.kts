@@ -7,5 +7,5 @@ include(
     ":ScalaOnly",
     ":KotlinThenScala",
 //    ":alsoKotlinThenScala",
-//    ":ScalaThenKotlin"
+    ":ScalaThenKotlin"
 )
